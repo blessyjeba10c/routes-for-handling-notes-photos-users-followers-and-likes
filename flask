@@ -1,0 +1,64 @@
+from flask import Flask, render_template, request, jsonify
+
+app = Flask(__name__)
+
+# Dummy data (replace with database interactions)
+notes = []
+photos = []
+followers = {}
+
+# Routes for handling notes
+@app.route('/notes', methods=['GET'])
+def get_notes():
+    return jsonify(notes)
+
+@app.route('/notes', methods=['POST'])
+def add_note():
+    data = request.get_json()
+    if data and 'note' in data:
+        new_note = data['note']
+        notes.append(new_note)
+        return jsonify({'message': 'Note added successfully'})
+    else:
+        return jsonify({'error': 'Invalid request'}), 400
+
+# Routes for handling photos
+@app.route('/photos', methods=['GET'])
+def get_photos():
+    return jsonify(photos)
+
+@app.route('/photos', methods=['POST'])
+def add_photo():
+    # Handle file upload here
+    # Save the photo and store its URL in the database
+    # Replace the below code with actual logic
+    new_photo_url = "path/to/new/photo.jpg"
+    photos.append(new_photo_url)
+    return jsonify({'message': 'Photo uploaded successfully'})
+
+# Routes for handling followers
+@app.route('/follow/<username>', methods=['POST'])
+def follow_user(username):
+    # Add logic to handle following a user
+    # Replace the below code with actual logic
+    if username not in followers:
+        followers[username] = []
+    current_user = "current_user"  # Replace this with the current user's username
+    if current_user not in followers[username]:
+        followers[username].append(current_user)
+    return jsonify({'message': f'You followed {username}'})
+
+# Routes for handling likes
+@app.route('/like/<note_id>', methods=['POST'])
+def like_note(note_id):
+    # Add logic to handle liking a note
+    # Replace the below code with actual logic
+    note_id = int(note_id)
+    if note_id >= 0 and note_id < len(notes):
+        # Handle like for the note with given ID
+        return jsonify({'message': f'You liked note with ID: {note_id}'})
+    else:
+        return jsonify({'error': 'Note ID not found'}), 404
+
+if __name__ == '__main__':
+    app.run(debug=True)
